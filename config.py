@@ -1,7 +1,7 @@
 import os
 from dotenv import load_dotenv
 
-load_dotenv()  
+load_dotenv(dotenv_path='config.env')  
 
 DB_CONFIG = {
     "user": os.getenv("DB_USER"),
