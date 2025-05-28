@@ -1,0 +1,22 @@
+spring:
+ output:
+  ansi:
+   enabled: always
+   
+ datasource:
+  url: jdbc:oracle:thin:@campuswallet_high?TNS_ADMIN=/oraclexe/Wallet_campuswallet
+  username: admin
+  password: Iampotato!25
+  driver-class-name: oracle.jdbc.OracleDriver
+  
+  jpa:
+   hibernate:
+    ddl-auto: create
+   properties:
+    hibernate:
+     format_sql: true
+   open-in-view: false
+     
+logging:
+ level:
+  org.hibernate.SQL: debug
