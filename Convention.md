@@ -19,17 +19,14 @@
 - 기능별 패키지 아래에서 controller, dto, repository, service 작성
 - 폴더 구조
 C:
-│   
-│  ├─main
-      │  application.yml
-      │  
-      └─smu
-          └─db_project
-              │  
-              ├─auth
-              ├─category
-              ├─domain    
-              ├─sales
-              └─spend
-
-                        
+│
+│ ├─main
+│ │
+│ └─smu
+│ └─db_project
+│ │
+│ ├─auth
+│ ├─category
+│ ├─domain
+│ ├─sales
+│ └─spend                    
