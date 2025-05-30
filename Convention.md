@@ -17,14 +17,5 @@
 ## 📌 파일 및 폴더 구조 규칙
 - **다른 팀원의 코드 변경해야될 시 꼭 팀 전체에게 전달**
 - 기능별 패키지 아래에서 controller, dto, repository, service 작성
-- 폴더 구조
-C:
-│
-│ ├─main
-│ │ └─smu
-│ │ └─db_project
-│ │ ├─auth
-│ │ ├─category
-│ │ ├─domain
-│ │ ├─sales
-│ │ └─spend            
+- 파일 구조
+
