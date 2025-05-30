@@ -21,12 +21,10 @@
 C:
 │
 │ ├─main
-│ │
-│ └─smu
-│ └─db_project
-│ │
-│ ├─auth
-│ ├─category
-│ ├─domain
-│ ├─sales
-│ └─spend                    
+│ │ └─smu
+│ │ └─db_project
+│ │ ├─auth
+│ │ ├─category
+│ │ ├─domain
+│ │ ├─sales
+│ │ └─spend            
