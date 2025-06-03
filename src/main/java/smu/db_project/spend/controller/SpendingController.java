@@ -16,9 +16,9 @@ public class SpendingController {
 
     private final SpendingService spendingService;
 
-    @GetMapping
-    public ResponseEntity<List<SpendingDto>> getAllSpendingList() {
-        return ResponseEntity.ok(spendingService.getAllSpendings());
+    @GetMapping("/spendings")
+    public ResponseEntity<List<SpendingDto>> getSpendingsByStudent(@RequestParam Long studentId) {
+        return ResponseEntity.ok(spendingService.getSpendingByStudent(studentId));
     }
 
     @PostMapping("/add")

@@ -1,5 +1,7 @@
 package smu.db_project.spend.repository;
 
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,4 +21,5 @@ public interface SpendingRepository extends JpaRepository<Spending, Long> {
             "FROM Spending s WHERE s.sNum.sNum = :studentId GROUP BY s.categoryName.categoryName " +
             "ORDER BY SUM(s.amount) DESC")
     List<MaxSpendingCategoryDto> findMaxSpendingCategory(@Param("studentId") Long studentId);
+
 }
