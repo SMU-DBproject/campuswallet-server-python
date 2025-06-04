@@ -21,16 +21,11 @@ public class Discount {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CATEGORY_NAME", nullable = false)
+    @JoinColumn(name = "CATEGORY_ID", nullable = false)
     private Category category;
 
     @Column(name = "DISCOUNT_NAME", length = 100, nullable = false)
     private String discountName;
-
-    @Min(0)
-    @Max(100)
-    @Column(name = "RATE", nullable = false)
-    private Integer rate;
 
     @Column(name = "DESCRIPTION", length = 300)
     private String description;

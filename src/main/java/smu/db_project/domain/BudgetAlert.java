@@ -11,8 +11,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"sNum", "categoryName"})
-
+@ToString(exclude = {"student", "discount"})
 public class BudgetAlert {
 
     @Id
@@ -23,19 +22,13 @@ public class BudgetAlert {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "S_NUM", nullable = false)
-    private Student sNum;
+    private Student student;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CATEGORY_NAME", nullable = false)
-    private Category categoryName;
-
-    @Column(name = "TOTAL_SPENDING", nullable = false)
-    private Integer totalSpending = 0;
-
-    @Column(name = "OVERAMOUNT")
-    private Integer overamount = 0;
+    @JoinColumn(name = "DISCOUNT_ID", nullable = false)
+    private Discount discount;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "ALERT_DATE", nullable = false)
-    private Date alertDate;
+    private Date alertDate = new Date();
 }
