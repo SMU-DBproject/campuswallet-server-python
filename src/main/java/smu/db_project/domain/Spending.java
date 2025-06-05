@@ -12,7 +12,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"sNum", "categoryName"})
+@ToString(exclude = {"student", "category"})
 public class Spending {
 
     @Id
@@ -23,13 +23,13 @@ public class Spending {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "S_NUM", nullable = false)
-    private Student sNum;
+    private Student student;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CATEGORY_NAME", nullable = false)
-    private Category categoryName;
+    @JoinColumn(name = "CATEGORY_ID", nullable = false)
+    private Category category;
 
-    @Min(1)
+    @Min(0)
     @Column(name = "AMOUNT", nullable = false)
     private Integer amount;
 

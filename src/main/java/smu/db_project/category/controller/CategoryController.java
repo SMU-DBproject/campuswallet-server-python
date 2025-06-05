@@ -9,6 +9,8 @@ import smu.db_project.category.service.CategoryService;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.RequestParam;
+
 @RestController
 @RequestMapping("/category")
 @RequiredArgsConstructor
@@ -16,18 +18,15 @@ public class CategoryController {
 
     private final CategoryService categoryService;
 
-    // TODO: 로그인 처리 후 학생 ID 받아오는 방식으로 바꾸기
-    private static final Long MOCK_STUDENT_ID = 1L;
-
-    @GetMapping
-    public ResponseEntity<List<CategorySpendingDto>> getCategorySpendings() {
-        List<CategorySpendingDto> result = categoryService.getCategorySpendings(MOCK_STUDENT_ID);
+    @GetMapping("/{sNum}")
+    public ResponseEntity<List<CategorySpendingDto>> getCategorySpendings(@PathVariable Long sNum) {
+        List<CategorySpendingDto> result = categoryService.getCategorySpendings(sNum);
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/max")
-    public ResponseEntity<MaxSpendingCategoryDto> getMaxCategory() {
-        MaxSpendingCategoryDto result = categoryService.getMaxSpendingCategory(MOCK_STUDENT_ID);
-        return result != null ? ResponseEntity.ok(result) : ResponseEntity.noContent().build();
+    @GetMapping("/max/{sNum}")
+    public ResponseEntity<MaxSpendingCategoryDto> getMaxCategory(@PathVariable Long sNum) {
+        MaxSpendingCategoryDto result = categoryService.getMaxSpendingCategory(sNum);
+        return ResponseEntity.ok(result);
     }
 }

@@ -1,4 +1,3 @@
-// spend/controller/SpendingController.java
 package smu.db_project.spend.controller;
 
 import lombok.RequiredArgsConstructor;
@@ -16,9 +15,9 @@ public class SpendingController {
 
     private final SpendingService spendingService;
 
-    @GetMapping
-    public ResponseEntity<List<SpendingDto>> getAllSpendingList() {
-        return ResponseEntity.ok(spendingService.getAllSpendings());
+    @GetMapping("/student/{sNum}")
+    public ResponseEntity<List<SpendingDto>> getSpendingsByStudent(@PathVariable Long sNum) {
+        return ResponseEntity.ok(spendingService.getSpendingsByStudent(sNum));
     }
 
     @PostMapping("/add")
@@ -27,8 +26,7 @@ public class SpendingController {
     }
 
     @PatchMapping("/fix")
-    public ResponseEntity<SpendingDto> updateSpending(@RequestParam Long id,
-                                                      @RequestBody SpendingDto dto) {
+    public ResponseEntity<SpendingDto> updateSpending(@RequestParam Long id, @RequestBody SpendingDto dto) {
         return ResponseEntity.ok(spendingService.updateSpending(id, dto));
     }
 

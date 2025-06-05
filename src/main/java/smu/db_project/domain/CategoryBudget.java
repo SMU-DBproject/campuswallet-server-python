@@ -1,4 +1,3 @@
-// CategoryBudget.java
 package smu.db_project.domain;
 
 import jakarta.persistence.*;
@@ -12,24 +11,22 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(exclude = {"student", "category"})
-
 public class CategoryBudget {
 
     @EmbeddedId
     private CategoryBudgetId id;
 
-    @MapsId("sNum") // CategoryBudgetId 필드명과 맞춤
+    @MapsId("sNum")
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "S_NUM", nullable = false)
     private Student student;
 
-    @MapsId("categoryName")
+    @MapsId("categoryId")
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "CATEGORY_NAME", nullable = false)
+    @JoinColumn(name = "CATEGORY_ID", nullable = false)
     private Category category;
 
-    @Min(1)
+    @Min(0)
     @Column(name = "LIMIT_AMOUNT", nullable = false)
     private Integer limitAmount;
 }
-

@@ -1,22 +1,35 @@
-// CategoryBudgetId.java
 package smu.db_project.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 @Embeddable
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
 public class CategoryBudgetId implements Serializable {
 
-    @Column(name = "S_NUM")
-    private Long sNum;
+    private static final long serialVersionUID = 1L;
 
-    @Column(name = "CATEGORY_NAME")
-    private String categoryName;
+    private Long sNum;
+    private Long categoryId;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CategoryBudgetId)) return false;
+        CategoryBudgetId that = (CategoryBudgetId) o;
+        return Objects.equals(sNum, that.sNum) &&
+                Objects.equals(categoryId, that.categoryId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(sNum, categoryId);
+    }
 }

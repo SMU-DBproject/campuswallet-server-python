@@ -1,15 +1,11 @@
 package smu.db_project.category.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
+@AllArgsConstructor
 public class CategorySpendingDto {
-
     private String categoryName;
     private Long totalSpending;
-
-    public CategorySpendingDto(String categoryName, Long totalSpending) {
-        this.categoryName = categoryName;
-        this.totalSpending = totalSpending;
-    }
 }

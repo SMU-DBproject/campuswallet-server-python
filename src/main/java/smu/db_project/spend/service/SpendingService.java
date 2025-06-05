@@ -1,83 +1,188 @@
-// spend/service/SpendingService.java
 package smu.db_project.spend.service;
 
 import lombok.RequiredArgsConstructor;
+import org.hibernate.dialect.OracleTypes;
+import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.SqlOutParameter;
+import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import smu.db_project.domain.Category;
-import smu.db_project.domain.Spending;
-import smu.db_project.domain.Student;
 import smu.db_project.spend.dto.SpendingDto;
-import smu.db_project.spend.repository.SpendingRepository;
-import smu.db_project.category.repository.CategoryRepository;
-import smu.db_project.auth.repository.StudentRepository;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import jakarta.annotation.PostConstruct;
+import javax.sql.DataSource;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class SpendingService {
 
-    private final SpendingRepository spendingRepository;
-    private final StudentRepository studentRepository;
-    private final CategoryRepository categoryRepository;
+    private final JdbcTemplate jdbcTemplate;
+    private final DataSource dataSource;
 
-    public List<SpendingDto> getAllSpendings() {
-        return spendingRepository.findAll().stream()
-                .map(s -> SpendingDto.builder()
-                        .id(s.getId())
-                        .sNum(s.getSNum().getSNum())
-                        .categoryName(s.getCategoryName().getCategoryName())
-                        .amount(s.getAmount())
-                        .spendDate(s.getSpendDate())
-                        .build())
-                .collect(Collectors.toList());
+    private SimpleJdbcCall insertCall;
+    private SimpleJdbcCall updateCall;
+    private SimpleJdbcCall deleteCall;
+    private SimpleJdbcCall selectByStudentCall;
+
+    @PostConstruct
+    private void init() {
+        insertCall = new SimpleJdbcCall(dataSource)
+                .withProcedureName("insert_spending")
+                .withoutProcedureColumnMetaDataAccess()
+                .declareParameters(
+                        new SqlParameter("p_s_num", Types.NUMERIC),
+                        new SqlParameter("p_category", Types.VARCHAR),
+                        new SqlParameter("p_amount", Types.NUMERIC),
+                        new SqlParameter("p_date", Types.DATE),
+                        new SqlOutParameter("p_success", Types.VARCHAR),
+                        new SqlOutParameter("p_message", Types.VARCHAR),
+                        new SqlOutParameter("p_id", Types.NUMERIC)
+                );
+
+        updateCall = new SimpleJdbcCall(dataSource)
+                .withProcedureName("update_spending")
+                .withoutProcedureColumnMetaDataAccess()
+                .declareParameters(
+                        new SqlParameter("p_id", Types.NUMERIC),
+                        new SqlParameter("p_new_amount", Types.NUMERIC),
+                        new SqlParameter("p_new_date", Types.DATE),
+                        new SqlParameter("p_new_category", Types.VARCHAR),
+                        new SqlOutParameter("p_success", Types.VARCHAR),
+                        new SqlOutParameter("p_message", Types.VARCHAR),
+                        new SqlOutParameter("p_id_out", Types.NUMERIC)
+                );
+
+
+
+        deleteCall = new SimpleJdbcCall(dataSource)
+                .withProcedureName("delete_spending")
+                .withoutProcedureColumnMetaDataAccess()
+                .declareParameters(
+                        new SqlParameter("p_id", Types.NUMERIC),
+                        new SqlOutParameter("p_success", Types.VARCHAR),
+                        new SqlOutParameter("p_message", Types.VARCHAR)
+                );
+
+
+        selectByStudentCall = new SimpleJdbcCall(dataSource)
+                .withProcedureName("get_spending_by_student")
+                .withoutProcedureColumnMetaDataAccess()
+                .declareParameters(
+                        new SqlParameter("p_s_num", Types.NUMERIC),
+                        new SqlOutParameter("p_result", OracleTypes.CURSOR,
+                                (rs, rowNum) -> SpendingDto.builder()
+                                        .id(rs.getLong("id"))
+                                        .sNum(rs.getLong("s_num"))
+                                        .categoryName(rs.getString("category_name"))
+                                        .amount(rs.getInt("amount"))
+                                        .spendDate(rs.getDate("spend_date"))
+                                        .build()
+                        ),
+                        new SqlOutParameter("p_success", Types.VARCHAR),
+                        new SqlOutParameter("p_message", Types.VARCHAR)
+                );
+
+
     }
 
+    public List<SpendingDto> getSpendingsByStudent(Long sNum) {
+        try {
+            Map<String, Object> inParams = Collections.singletonMap("p_s_num", sNum);
+            Map<String, Object> result = selectByStudentCall.execute(inParams);
 
-    @Transactional
+            String success = (String) result.get("p_success");
+            String message = (String) result.get("p_message");
+
+            if (!"Y".equalsIgnoreCase(success)) {
+                throw new RuntimeException("조회 실패: " + message);
+            }
+
+            return (List<SpendingDto>) result.get("p_result");
+
+        } catch (DataAccessException e) {
+            throw new RuntimeException("지출 내역 조회 중 DB 오류", e);
+        }
+    }
+
     public SpendingDto addSpending(SpendingDto dto) {
-        Student student = studentRepository.findById(dto.getSNum())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 학생"));
-        Category category = categoryRepository.findById(dto.getCategoryName())
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 카테고리"));
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("p_s_num", dto.getSNum());
+            params.put("p_category", dto.getCategoryName());
+            params.put("p_amount", dto.getAmount());
+            params.put("p_date", new Date(dto.getSpendDate().getTime()));
 
-        Spending spending = new Spending();
-        spending.setSNum(student);
-        spending.setCategoryName(category);
-        spending.setAmount(dto.getAmount());
-        spending.setSpendDate(dto.getSpendDate() == null ? new Date() : dto.getSpendDate());
+            Map<String, Object> result = insertCall.execute(params);
 
-        Spending saved = spendingRepository.save(spending);
+            String success = (String) result.get("p_success");
+            String message = (String) result.get("p_message");
+            Number insertedId = (Number) result.get("p_id");
 
-        dto.setId(saved.getId());
-        return dto;
+            System.out.printf("결과: success=%s, message=%s, id=%s%n", success, message, insertedId);
+
+            if (!"Y".equals(success)) {
+                throw new RuntimeException("지출 추가 실패: " + message);
+            }
+
+            dto.setId(insertedId != null ? insertedId.longValue() : null);
+            return dto;
+        } catch (DataAccessException e) {
+            throw new RuntimeException("지출 추가 실패", e);
+        }
     }
 
-    @Transactional
     public SpendingDto updateSpending(Long id, SpendingDto dto) {
-        Spending spending = spendingRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 소비"));
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("p_id", id);
+            params.put("p_new_amount", dto.getAmount());
+            params.put("p_new_date", new Date(dto.getSpendDate().getTime()));
+            params.put("p_new_category", dto.getCategoryName());
 
-        if (dto.getAmount() != null)
-            spending.setAmount(dto.getAmount());
-        if (dto.getSpendDate() != null)
-            spending.setSpendDate(dto.getSpendDate());
+            Map<String, Object> result = updateCall.execute(params);
 
-        return SpendingDto.builder()
-                .id(spending.getId())
-                .sNum(spending.getSNum().getSNum())
-                .categoryName(spending.getCategoryName().getCategoryName())
-                .amount(spending.getAmount())
-                .spendDate(spending.getSpendDate())
-                .build();
+            String success = (String) result.get("p_success");
+            String message = (String) result.get("p_message");
+            Number idOut = (Number) result.get("p_id_out");
+
+            System.out.printf("UPDATE 결과: success=%s, message=%s, id_out=%s%n", success, message, idOut);
+
+            if (!"Y".equals(success)) {
+                throw new RuntimeException("지출 수정 실패: " + message);
+            }
+
+            dto.setId(idOut != null ? idOut.longValue() : null);
+            return dto;
+        } catch (DataAccessException e) {
+            throw new RuntimeException("지출 수정 실패", e);
+        }
     }
 
-    @Transactional
     public void deleteSpending(Long id) {
-        spendingRepository.deleteById(id);
+        try {
+            Map<String, Object> params = new HashMap<>();
+            params.put("p_id", id);
+
+            Map<String, Object> result = deleteCall.execute(params);
+
+            String success = (String) result.get("p_success");
+            String message = (String) result.get("p_message");
+
+            System.out.printf("DELETE 결과: success=%s, message=%s%n", success, message);
+
+            if (!"Y".equals(success)) {
+                throw new RuntimeException("지출 삭제 실패: " + message);
+            }
+        } catch (DataAccessException e) {
+            throw new RuntimeException("지출 삭제 실패", e);
+        }
     }
+
+
+
 }

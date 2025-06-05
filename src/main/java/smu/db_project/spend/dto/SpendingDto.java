@@ -1,7 +1,7 @@
-// spend/dto/SpendingDto.java
 package smu.db_project.spend.dto;
 
 import lombok.*;
+
 import java.util.Date;
 
 @Getter
