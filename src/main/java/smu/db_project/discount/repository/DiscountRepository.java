@@ -1,4 +1,4 @@
-package smu.db_project.repository;
+package smu.db_project.discount.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

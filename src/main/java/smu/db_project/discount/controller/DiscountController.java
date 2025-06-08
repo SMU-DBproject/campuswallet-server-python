@@ -1,9 +1,9 @@
-package smu.db_project.controller;
+package smu.db_project.discount.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import smu.db_project.domain.Discount;
-import smu.db_project.service.DiscountService;
+import smu.db_project.discount.service.DiscountService;
 
 import java.util.List;
 

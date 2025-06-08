@@ -1,9 +1,10 @@
-package smu.db_project.service;
+package smu.db_project.discount.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import smu.db_project.discount.repository.DiscountRepository;
 import smu.db_project.domain.Discount;
-import smu.db_project.repository.DiscountRepository;
 
 import java.util.ArrayList;
 import java.util.List;
