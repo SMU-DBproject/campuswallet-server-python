@@ -30,3 +30,4 @@ public class Discount {
     @Column(name = "DESCRIPTION", length = 300)
     private String description;
 }
+

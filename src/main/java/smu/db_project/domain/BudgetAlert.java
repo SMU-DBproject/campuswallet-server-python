@@ -32,3 +32,4 @@ public class BudgetAlert {
     @Column(name = "ALERT_DATE", nullable = false)
     private Date alertDate = new Date();
 }
+

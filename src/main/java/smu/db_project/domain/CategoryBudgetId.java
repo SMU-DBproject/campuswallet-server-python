@@ -33,3 +33,4 @@ public class CategoryBudgetId implements Serializable {
         return Objects.hash(sNum, categoryId);
     }
 }
+
