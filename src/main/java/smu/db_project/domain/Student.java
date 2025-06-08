@@ -27,4 +27,3 @@ public class Student {
     @Column(name = "PASSWORD", nullable = false, length = 100)
     private String password;
 }
-

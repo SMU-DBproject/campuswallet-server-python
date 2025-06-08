@@ -1,10 +1,8 @@
 ## 1차 작업
-Oracle Cloud에 Oracle DB 올리고 Spring 연동
+feature/budgetalert 작업
 
 
 
 
 ## 2차 작업
-Entity 작성 및 파일 구조 정리
-
-
+feature/spend와 머지

@@ -30,4 +30,3 @@ public class CategoryBudget {
     @Column(name = "LIMIT_AMOUNT", nullable = false)
     private Integer limitAmount;
 }
-
