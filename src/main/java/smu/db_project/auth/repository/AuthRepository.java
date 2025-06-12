@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import smu.db_project.domain.Student;
 
 import java.util.List;
-
 @Repository
 @RequiredArgsConstructor
 public class AuthRepository {
@@ -23,9 +22,17 @@ public class AuthRepository {
         return s;
     };
 
+    // 🔹 기존 학번 기준 조회 메서드
     public Student findStudentBySNum(Long sNum) {
         String sql = "SELECT S_NUM, S_ID, NAME, PASSWORD FROM STUDENT WHERE S_NUM = ?";
         List<Student> list = jdbcTemplate.query(sql, studentRowMapper, sNum);
+        return list.isEmpty() ? null : list.get(0);
+    }
+
+    // 🔹 신규 추가: 사용자 ID 기준 조회 메서드
+    public Student findStudentBySId(String sId) {
+        String sql = "SELECT S_NUM, S_ID, NAME, PASSWORD FROM STUDENT WHERE S_ID = ?";
+        List<Student> list = jdbcTemplate.query(sql, studentRowMapper, sId);
         return list.isEmpty() ? null : list.get(0);
     }
 
