@@ -10,7 +10,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Service;
 import smu.db_project.category.dto.CategorySpendingDto;
 import smu.db_project.category.dto.MaxSpendingCategoryDto;
-import smu.db_project.category.repository.SpendingQueryRepository;
 
 import javax.sql.DataSource;
 import java.sql.Types;
@@ -26,55 +25,50 @@ public class CategoryService {
     private final DataSource dataSource;
 
     private SimpleJdbcCall getCategorySpendingCall;
-
     private SimpleJdbcCall getMaxSpendingCategoryCall;
-
 
     @PostConstruct
     private void init() {
         getCategorySpendingCall = new SimpleJdbcCall(dataSource)
-                .withProcedureName("get_category_spendings")
+                .withProcedureName("GET_CATEGORY_SPENDINGS")
                 .withoutProcedureColumnMetaDataAccess()
                 .declareParameters(
-                        new SqlParameter("p_s_num", Types.NUMERIC),
-                        new SqlOutParameter("p_result", OracleTypes.CURSOR, (rs, rowNum) ->
+                        new SqlParameter("P_S_NUM", Types.NUMERIC),
+                        new SqlOutParameter("P_RESULT", OracleTypes.CURSOR, (rs, rowNum) ->
                                 new CategorySpendingDto(
                                         rs.getString("category_name"),
                                         rs.getLong("spending")
                                 )
                         ),
-                        new SqlOutParameter("p_success", Types.VARCHAR),
-                        new SqlOutParameter("p_message", Types.VARCHAR)
+                        new SqlOutParameter("P_SUCCESS", Types.VARCHAR),
+                        new SqlOutParameter("P_MESSAGE", Types.VARCHAR)
                 );
 
         getMaxSpendingCategoryCall = new SimpleJdbcCall(dataSource)
-                .withProcedureName("get_max_spending_category")
+                .withProcedureName("GET_MAX_SPENDING_CATEGORY_PROC")  // ✅ 정확한 이름
                 .withoutProcedureColumnMetaDataAccess()
                 .declareParameters(
-                        new SqlParameter("p_s_num", Types.NUMERIC),
-                        new SqlOutParameter("p_category", Types.VARCHAR),
-                        new SqlOutParameter("p_total", Types.NUMERIC),
-                        new SqlOutParameter("p_success", Types.VARCHAR),
-                        new SqlOutParameter("p_message", Types.VARCHAR)
+                        new SqlParameter("P_S_NUM", Types.NUMERIC),               // ✅ 입력
+                        new SqlOutParameter("P_CATEGORY", Types.VARCHAR),        // ✅ 출력
+                        new SqlOutParameter("P_TOTAL_AMOUNT", Types.NUMERIC)     // ✅ 출력
                 );
     }
-
 
     public List<CategorySpendingDto> getCategorySpendings(Long studentId) {
         try {
             Map<String, Object> in = new HashMap<>();
-            in.put("p_s_num", studentId);
+            in.put("P_S_NUM", studentId);
 
             Map<String, Object> out = getCategorySpendingCall.execute(in);
 
-            String success = (String) out.get("p_success");
-            String message = (String) out.get("p_message");
+            String success = (String) out.get("P_SUCCESS");
+            String message = (String) out.get("P_MESSAGE");
 
             if (!"Y".equals(success)) {
                 throw new RuntimeException("소비 조회 실패: " + message);
             }
 
-            return (List<CategorySpendingDto>) out.get("p_result");
+            return (List<CategorySpendingDto>) out.get("P_RESULT");
 
         } catch (Exception e) {
             throw new RuntimeException("소비 조회 중 오류", e);
@@ -83,29 +77,25 @@ public class CategoryService {
 
     public MaxSpendingCategoryDto getMaxSpendingCategory(Long studentId) {
         try {
-            Map<String, Object> in = Map.of("p_s_num", studentId);
+            System.out.println("📤 [서버] 호출 파라미터 - P_S_NUM: " + studentId);
+
+            Map<String, Object> in = Map.of("P_S_NUM", studentId);
             Map<String, Object> out = getMaxSpendingCategoryCall.execute(in);
 
-            String success = (String) out.get("p_success");
-            String message = (String) out.get("p_message");
+            System.out.println("📥 [서버] 프로시저 Raw 결과: " + out);
 
-            System.out.println("🔍 [서버] 프로시저 결과 - success: " + success + ", message: " + message);
-
-
-            if (!"Y".equals(success)) {
-                throw new RuntimeException("최대 소비 조회 실패: %s%n" + message);
-            }
-
-            String category = (String) out.get("p_category");
-            Number total = (Number) out.get("p_total");
+            String category = (String) out.get("P_CATEGORY");
+            Number total = (Number) out.get("P_TOTAL_AMOUNT");
 
             System.out.println("✅ [서버] 반환값 - category: " + category + ", total: " + total);
 
             return new MaxSpendingCategoryDto(category, total != null ? total.longValue() : 0L);
 
         } catch (Exception e) {
+            System.out.println("❌ [서버] 예외 발생: " + e.getMessage());
+            e.printStackTrace();
             throw new RuntimeException("최대 소비 조회 중 오류", e);
         }
     }
-
 }
+
