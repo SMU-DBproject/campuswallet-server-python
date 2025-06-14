@@ -2,10 +2,7 @@ package smu.db_project.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import smu.db_project.auth.dto.AuthResponseDto;
-import smu.db_project.auth.dto.CategoryBudgetDto;
-import smu.db_project.auth.dto.LoginRequestDto;
-import smu.db_project.auth.dto.RegisterRequestDto;
+import smu.db_project.auth.dto.*;
 import smu.db_project.auth.repository.AuthRepository;
 import smu.db_project.domain.Student;
 
@@ -24,14 +21,14 @@ public class AuthService {
         Student existing = authRepository.findStudentBySId(request.getSId());
 
         if (existing == null) {
-            return new AuthResponseDto("fail", "존재하지 않는 사용자입니다.");
+            return new AuthResponseDto("fail", "존재하지 않는 사용자입니다.", null);
         }
 
         if (!existing.getPassword().equals(request.getPassword())) {
-            return new AuthResponseDto("fail", "비밀번호가 올바르지 않습니다.");
+            return new AuthResponseDto("fail", "비밀번호가 올바르지 않습니다." , null);
         }
 
-        return new AuthResponseDto("success", "로그인 성공");
+        return new AuthResponseDto("success", "로그인 성공", existing.getSNum());
     }
 
     // 회원가입 메서드
@@ -39,7 +36,7 @@ public class AuthService {
         Student existing = authRepository.findStudentBySId(request.getSId());
 
         if (existing != null) {
-            return new AuthResponseDto("fail", "이미 가입된 사용자입니다.");
+            return new AuthResponseDto("fail", "이미 가입된 사용자입니다.", existing.getSNum());
         }
 
         // 새로운 사용자 등록
@@ -60,6 +57,25 @@ public class AuthService {
             }
         }
 
-        return new AuthResponseDto("success", "회원가입 및 예산 등록 완료");
+        return new AuthResponseDto("success", "회원가입 및 예산 등록 완료", student.getSNum());
+    }
+
+    // 마이페이지 메소드
+    // AuthService.java
+
+    public StudentResponseDto getStudentInfoBySId(String sId) {
+        Student student = authRepository.findStudentBySId(sId);
+
+        if (student == null) {
+            throw new IllegalArgumentException("존재하지 않는 사용자입니다.");
+        }
+
+        return new StudentResponseDto(
+                student.getSNum(),
+                student.getSId(),
+                student.getName()
+        );
+
+
     }
 }

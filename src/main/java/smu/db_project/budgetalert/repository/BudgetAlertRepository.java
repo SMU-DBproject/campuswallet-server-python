@@ -22,5 +22,15 @@ public interface BudgetAlertRepository extends JpaRepository<BudgetAlert, Long> 
         WHERE 
             s_num = :sNum
         """, nativeQuery = true)
+
     List<Object[]> findRawAlertsByStudentNum(@Param("sNum") Long sNum);
+
+
+    @Query(value = """
+    SELECT category_name, limit_amount, total_spent
+    FROM v_exceeded_budget
+    WHERE s_num = :sNum
+""", nativeQuery = true)
+    List<Object[]> findExceededBudgets(@Param("sNum") Long sNum);
+
 }

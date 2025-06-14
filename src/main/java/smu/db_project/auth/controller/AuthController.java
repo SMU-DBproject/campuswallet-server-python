@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import smu.db_project.auth.dto.AuthResponseDto;
 import smu.db_project.auth.dto.LoginRequestDto;
 import smu.db_project.auth.dto.RegisterRequestDto;
+import smu.db_project.auth.dto.StudentResponseDto;
 import smu.db_project.auth.service.AuthService;
+
 
 @RestController
 @RequestMapping("/auth")
@@ -36,4 +38,16 @@ public class AuthController {
 
         return ResponseEntity.ok(response);
     }
+
+    // AuthController.java
+
+    @GetMapping("/{sId}")
+    public ResponseEntity<StudentResponseDto> getStudentBySId(@PathVariable String sId) {
+        StudentResponseDto student = authService.getStudentInfoBySId(sId);
+        if (student == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(student);
+    }
+
 }

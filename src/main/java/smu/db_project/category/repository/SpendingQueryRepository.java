@@ -13,4 +13,18 @@ import java.util.List;
 @Repository
 public interface SpendingQueryRepository extends JpaRepository<Spending, Long> {
 
+    @Query("""
+        SELECT new smu.db_project.category.dto.MaxSpendingCategoryDto(
+            c.categoryName,
+            SUM(s.amount)
+        )
+        FROM Spending s
+        JOIN s.category c
+        WHERE s.student.sNum = :studentId
+        GROUP BY c.categoryName
+        ORDER BY SUM(s.amount) DESC
+        """)
+    List<MaxSpendingCategoryDto> findTopSpendingCategory(@Param("studentId") Long studentId);
+
+
 }

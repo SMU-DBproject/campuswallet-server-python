@@ -89,12 +89,17 @@ public class CategoryService {
             String success = (String) out.get("p_success");
             String message = (String) out.get("p_message");
 
+            System.out.println("🔍 [서버] 프로시저 결과 - success: " + success + ", message: " + message);
+
+
             if (!"Y".equals(success)) {
                 throw new RuntimeException("최대 소비 조회 실패: %s%n" + message);
             }
 
             String category = (String) out.get("p_category");
             Number total = (Number) out.get("p_total");
+
+            System.out.println("✅ [서버] 반환값 - category: " + category + ", total: " + total);
 
             return new MaxSpendingCategoryDto(category, total != null ? total.longValue() : 0L);
 
