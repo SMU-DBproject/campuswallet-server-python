@@ -1,6 +1,7 @@
 package smu.db_project.discount.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import smu.db_project.domain.Discount;
 import smu.db_project.discount.service.DiscountService;
@@ -18,4 +19,7 @@ public class DiscountController {
     public List<Discount> getRecommendedDiscounts(@RequestParam("studentId") Long studentId) {
         return discountService.getRecommendedDiscounts(studentId);
     }
+
+
+
 }

@@ -8,6 +8,7 @@ import smu.db_project.domain.Discount;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +31,7 @@ public class DiscountService {
         if (topCategoryId != null) {
             result.addAll(discountRepository.findByCategoryId(topCategoryId));
         }
+
 
         return result;
     }
