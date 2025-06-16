@@ -35,6 +35,7 @@
 |Cloud 연동|홍서연|
 |Entity 구현|홍서연|
 
+<br/>
 - **2주차 : 페이지 구현**
 
 |업무|담당자|
@@ -44,6 +45,7 @@
 |카테고리 예산 초과 경고 기능 구현|홍서연|
 |할인 추천 기능 구현|강민채|
 
+<br/>
 - **3주차 : 기능 통합 및 Front 작업**
 
 |업무|담당자|
@@ -55,17 +57,21 @@
 <br/><br/><br/><br/>
 
 ## 👩‍💻 기술 스택
-- **Backend**: Java, Spring Boot
-- **Frontend**: TypeScript, React
-- **Database**: Oracle Autonomous DB (Cloud)
-- **빌드 도구**: Gradle
+- **Backend** : Java, Spring Boot
+- **Frontend** : TypeScript, React
+- **Database** : Oracle Autonomous DB (Cloud)
+- **빌드 도구** : Gradle
 <br/><br/><br/><br/>
 
 ## 📑 시스템 아키텍처
 사용자(클라이언트)
+<br/>
 ↓
+<br/>
 Spring Boot REST API (Controller → Service → Repository)
+<br/>
 ↓
+<br/>
 Oracle Autonomous DB (View, Procedure, Trigger 활용)
 <br/><br/><br/><br/>
 
