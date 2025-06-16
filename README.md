@@ -104,10 +104,17 @@ Oracle Autonomous DB (View, Procedure, Trigger 활용)
 3. 프로젝트 클론  
    ```bash
    git clone https://github.com/SMU-DBproject/campuswallet-server-spring.git
+   
 4. Gradle로 의존성 설치 및 빌드
-5. application.yml에 Oracle DB 접속 정보 설정
-6. Spring Boot 애플리케이션 실행
-7. API 테스트
+   ```bash
+   ./gradlew build
+
+6. application.yml에 Oracle DB 접속 정보 설정
+      ```bash
+      curl http://localhost:8080/
+
+7. Spring Boot 애플리케이션 실행
+8. API 테스트
 <br/><br/><br/><br/>
 
 ## 👥 팀원
