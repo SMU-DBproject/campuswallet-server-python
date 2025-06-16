@@ -1,7 +1,7 @@
 # 🧩 Campus Wallet
 대학생 생활비 분석 및 절약 추천 시스템
 숙명여자대학교 2025년 1학기 데베프 팀 프로젝트
-<br/><br/><br/><br/>
+<br/><br/><br/>
 
 ## 🚀 프로젝트 개요
 본 프로젝트는 이용자(대학생)의 생활비 지출 데이터를 분석하여  
@@ -9,7 +9,7 @@
 <br/>
 학생들이 자신의 소비 패턴을 파악하고,  
 예산 초과 카테고리를 알림으로 받아 절약에 도움을 받을 수 있도록 설계되었습니다.
-<br/><br/><br/><br/>
+<br/><br/><br/>
 
 ## 📑 주요 기능
 - **개인 정보 관리**  
@@ -26,7 +26,40 @@
 
 - **할인 정보 추천**  
   예산 초과 카테고리 항목에 대해 할인 정보 추천 목록 조회
-<br/><br/><br/><br/>
+<br/><br/><br/>
+
+## ❄️ 파일 구조
+
+smu.db_project
+└── domain
+    ├── entity           // 홍서연 .... entity 정의
+    ├── auth             // 김문원
+    │   ├── controller
+    │   ├── dto
+    │   ├── repository
+    │   └── service
+    ├── budgetalert      // 홍서연
+    │   ├── controller
+    │   ├── dto
+    │   ├── repository
+    │   └── service
+    ├── category         // 김민경
+    │   ├── controller
+    │   ├── dto
+    │   ├── repository
+    │   └── service
+    ├── spend            // 김민경
+    │   ├── controller
+    │   ├── dto
+    │   ├── repository
+    │   └── service
+    └── discount         // 강민채
+        ├── controller
+        ├── repository
+        └── service
+
+
+<br/><br/><br/>
 
 ## 📅 프로젝트 진행 일정
 
@@ -60,14 +93,14 @@
 |front 작업 및 연동|김문원, 김민경|
 |PPT 작성 및 프레젠테이션 준비|강민채|
 
-<br/><br/><br/><br/>
+<br/><br/><br/>
 
 ## 👩‍💻 기술 스택
 - **Backend** : Java, Spring Boot
 - **Frontend** : TypeScript, React
 - **Database** : Oracle Autonomous DB (Cloud)
 - **빌드 도구** : Gradle
-<br/><br/><br/><br/>
+<br/><br/><br/>
 
 ## 📑 시스템 아키텍처
 사용자(클라이언트)
@@ -79,7 +112,7 @@ Spring Boot REST API (Controller → Service → Repository)
 ↓
 <br/>
 Oracle Autonomous DB (View, Procedure, Trigger 활용)
-<br/><br/><br/><br/>
+<br/><br/><br/>
 
 ## ⚙️ 주요 모듈 및 패키지 구조
 - `domain.auth`  
@@ -96,7 +129,7 @@ Oracle Autonomous DB (View, Procedure, Trigger 활용)
 
 - `domain.spending`  
   소비 데이터 관리 기능
-<br/><br/><br/><br/>
+<br/><br/><br/>
 
 ## 🪛 설치 및 실행 방법
 1. Oracle Autonomous DB 인스턴스 생성 및 접속 정보 준비  
@@ -115,7 +148,7 @@ Oracle Autonomous DB (View, Procedure, Trigger 활용)
 
 7. Spring Boot 애플리케이션 실행
 8. API 테스트
-<br/><br/><br/><br/>
+<br/><br/><br/>
 
 ## 👥 팀원
 |이름|전공|github 아이디|
