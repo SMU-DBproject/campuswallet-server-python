@@ -28,35 +28,35 @@
   예산 초과 카테고리 항목에 대해 할인 정보 추천 목록 조회
 <br/><br/><br/>
 
-## ❄️ 파일 구조
+❄️ 파일 구조  
+smu.db_project  
+└── domain  
+    ├── entity           // 홍서연 .... entity 정의  
+    ├── auth             // 김문원  
+    │   ├── controller  
+    │   ├── dto  
+    │   ├── repository  
+    │   └── service  
+    ├── budgetalert      // 홍서연  
+    │   ├── controller  
+    │   ├── dto  
+    │   ├── repository  
+    │   └── service  
+    ├── category         // 김민경  
+    │   ├── controller  
+    │   ├── dto  
+    │   ├── repository  
+    │   └── service  
+    ├── spend            // 김민경  
+    │   ├── controller  
+    │   ├── dto  
+    │   ├── repository  
+    │   └── service  
+    └── discount         // 강민채  
+        ├── controller  
+        ├── repository  
+        └── service  
 
-smu.db_project
-└── domain
-    ├── entity           // 홍서연 .... entity 정의
-    ├── auth             // 김문원
-    │   ├── controller
-    │   ├── dto
-    │   ├── repository
-    │   └── service
-    ├── budgetalert      // 홍서연
-    │   ├── controller
-    │   ├── dto
-    │   ├── repository
-    │   └── service
-    ├── category         // 김민경
-    │   ├── controller
-    │   ├── dto
-    │   ├── repository
-    │   └── service
-    ├── spend            // 김민경
-    │   ├── controller
-    │   ├── dto
-    │   ├── repository
-    │   └── service
-    └── discount         // 강민채
-        ├── controller
-        ├── repository
-        └── service
 
 
 <br/><br/><br/>
